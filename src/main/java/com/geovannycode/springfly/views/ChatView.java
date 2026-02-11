@@ -1,9 +1,12 @@
 package com.geovannycode.springfly.views;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
+import com.geovannycode.springfly.model.BookingDetails;
+import com.geovannycode.springfly.service.BookingService;
 import com.geovannycode.springfly.service.ChatService;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -21,12 +24,19 @@ import com.vaadin.flow.component.textfield.TextField;
 public class ChatView extends VerticalLayout {
 
     private final ChatService chatService;
+    private final BookingService bookingService;
     private final VerticalLayout messagesContainer;
     private final TextField messageField;
     private final String chatId;
+    private Runnable onBookingChanged;
 
-    public ChatView(ChatService chatService) {
+    public void setOnBookingChanged(Runnable onBookingChanged) {
+        this.onBookingChanged = onBookingChanged;
+    }
+
+    public ChatView(ChatService chatService, BookingService bookingService) {
         this.chatService = chatService;
+        this.bookingService = bookingService;
         this.chatId = UUID.randomUUID().toString();
 
         addClassName("chat-view");
@@ -38,7 +48,7 @@ public class ChatView extends VerticalLayout {
         Div headerDiv = new Div();
         headerDiv.addClassName("chat-header");
         headerDiv.setWidthFull();
-        H2 headerTitle = new H2("🤖 SpringFly Concierge");
+        H2 headerTitle = new H2("🤖Asistente de Viaje SpringFly");
         headerDiv.add(headerTitle);
 
         // Messages container with scroll
@@ -90,6 +100,9 @@ public class ChatView extends VerticalLayout {
         messagesContainer.add(loadingIndicator);
         scrollToBottom();
 
+        // Snapshot bookings before AI call to detect changes
+        List<BookingDetails> bookingsBefore = bookingService.getAllBookings();
+
         // Get AI response
         getUI().ifPresent(ui -> ui.access(() -> {
             try {
@@ -101,6 +114,14 @@ public class ChatView extends VerticalLayout {
                 // Add AI response to UI
                 addMessage(aiResponse, false);
                 scrollToBottom();
+
+                // Only refresh grid if bookings actually changed
+                if (onBookingChanged != null) {
+                    List<BookingDetails> bookingsAfter = bookingService.getAllBookings();
+                    if (!bookingsBefore.equals(bookingsAfter)) {
+                        onBookingChanged.run();
+                    }
+                }
 
             } catch (Exception e) {
                 messagesContainer.remove(loadingIndicator);
@@ -127,7 +148,7 @@ public class ChatView extends VerticalLayout {
         avatar.addClassName(isUser ? "user" : "assistant");
 
         String sender = isUser ? "You" : "Assistant";
-        String timeStr = LocalTime.now().format(DateTimeFormatter.ofPattern("M/d/yy, h:mm a"));
+        String timeStr = LocalDateTime.now().format(DateTimeFormatter.ofPattern("M/d/yy, h:mm a"));
 
         Span senderName = new Span(sender);
         Span timeSpan = new Span(timeStr);

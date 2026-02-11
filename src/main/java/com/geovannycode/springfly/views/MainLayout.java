@@ -21,7 +21,8 @@ public class MainLayout extends HorizontalLayout {
             .set("flex", "2")
             .set("min-width", "0");
 
-        ChatView chatView = new ChatView(chatService);
+        ChatView chatView = new ChatView(chatService, bookingService);
+        chatView.setOnBookingChanged(bookingsView::refreshBookings);
         chatView.getStyle()
             .set("flex", "1")
             .set("min-width", "320px")

@@ -50,7 +50,7 @@ public class DataInitializationService implements CommandLineRunner {
 
         // Generate 10 different passengers
         passengers.add(new Passenger("Geovanny", "Mendoza"));
-        passengers.add(new Passenger("Claudia", "Aguirre"));
+        passengers.add(new Passenger("Elena", "Aguirre"));
         passengers.add(new Passenger("Omar", "Berroteran"));
         passengers.add(new Passenger("Valeria", "Ahumada"));
         passengers.add(new Passenger("Aimed", "Lopez"));

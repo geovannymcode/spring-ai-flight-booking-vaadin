@@ -34,7 +34,7 @@ public class BookingsView extends VerticalLayout {
         setSpacing(false);
 
         // Header
-        H2 title = new H2("✈ SpringFly Bookings");
+        H2 title = new H2("✈ Reservas SpringFly");
 
         Icon refreshIcon = VaadinIcon.REFRESH.create();
         refreshIcon.getStyle().set("color", "white");
@@ -116,7 +116,7 @@ public class BookingsView extends VerticalLayout {
         return badge;
     }
 
-    private void refreshBookings() {
+    public void refreshBookings() {
         grid.setItems(bookingService.getAllBookings());
     }
 

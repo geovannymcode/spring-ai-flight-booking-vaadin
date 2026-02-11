@@ -28,7 +28,7 @@ public class ChatService {
             return response;
         } catch (Exception e) {
             log.error("Error processing chat {}: {}", chatId, e.getMessage(), e);
-            return "I apologize, but I'm experiencing technical difficulties. Please try again or contact our support team directly.";
+            return "Me disculpo, pero estoy experimentando dificultades técnicas. Por favor, inténtalo nuevamente o contacta directamente a nuestro equipo de soporte.";
         }
     }
 }
