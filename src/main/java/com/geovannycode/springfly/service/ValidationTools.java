@@ -1,111 +1,172 @@
 package com.geovannycode.springfly.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.stereotype.Service;
 
-import com.geovannycode.springfly.model.BookingClass;
+import com.geovannycode.springfly.model.Booking;
+import com.geovannycode.springfly.model.BookingDetails;
+import com.geovannycode.springfly.model.BookingSnapshot;
+import com.geovannycode.springfly.model.BookingStatus;
+import com.geovannycode.springfly.model.SpringFlyDB;
 import com.geovannycode.springfly.model.ValidationResult;
 
-import java.time.LocalDate;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class ValidationTools {
 
+   private static final Logger log = LoggerFactory.getLogger(ValidationTools.class);
+
+    private final SpringFlyDB springFlyDB;
     private final BookingService bookingService;
 
-    public ValidationTools(BookingService bookingService) {
+    private final Map<String, BookingSnapshot> snapshots = new ConcurrentHashMap<>();
+
+    public ValidationTools(SpringFlyDB springFlyDB, BookingService bookingService) {
+        this.springFlyDB = springFlyDB;
         this.bookingService = bookingService;
     }
 
     @Tool(description = """
-        Validates if a booking change is allowed based on company policies.
-        Checks: booking exists, passenger match, cancellation status, date validity.
-        Returns validation result with error message if invalid.
+        Verify that the last action taken was successful and matches the customer's intent. 
+        Use this after performing any booking modification to confirm the result.
+        Parameters:
+        - bookingNumber: The booking reference number
+        - firstName: Customer's first name
+        - lastName: Customer's last name  
+        - actionTaken: Description of what action was performed (e.g., 'changed flight date to 2026-02-15')
+        - customerIntent: What the customer originally requested (e.g., 'change flight to February 15th')
+        Returns a ValidationResult indicating if the action was successful and matches intent.
         """)
-    public ValidationResult validateBookingChange(String bookingNumber, String firstName, String lastName) {
-        try {
-            bookingService.getBookingDetails(bookingNumber, firstName, lastName);
-            return ValidationResult.valid();
-        } catch (Exception e) {
-            return ValidationResult.invalid(e.getMessage());
-        }
-    }
+    public ValidationResult validateAction(String bookingNumber, String firstName, String lastName,
+            String actionTaken, String customerIntent) {
+        log.info("Validating action '{}' against customer intent '{}' for booking {}", 
+            actionTaken, customerIntent, bookingNumber);
 
-    @Tool(description = """
-        Validates if a new flight date is acceptable.
-        Checks: date is not in the past, at least 24 hours from now.
-        Returns validation result with error message if invalid.
-        """)
-    public ValidationResult validateNewDate(String newDate) {
         try {
-            LocalDate parsedDate = LocalDate.parse(newDate);
-            if (parsedDate.isBefore(LocalDate.now())) {
-                return ValidationResult.invalid("Cannot book flights in the past");
+            BookingDetails currentBooking = bookingService.getBookingDetails(bookingNumber, firstName, lastName);
+
+            // Check if booking exists and is valid
+            if (currentBooking.date() == null) {
+                return ValidationResult.failure(
+                    actionTaken,
+                    customerIntent,
+                    "Booking not found or invalid",
+                    "Verify the booking details with the customer and try again."
+                );
             }
-            if (parsedDate.isBefore(LocalDate.now().plusDays(1))) {
-                return ValidationResult.invalid("Flights must be booked at least 24 hours in advance");
+
+            // Check if booking was cancelled when it shouldn't be
+            if (currentBooking.bookingStatus() == BookingStatus.CANCELLED 
+                    && !customerIntent.toLowerCase().contains("cancel")) {
+                return ValidationResult.failure(
+                    actionTaken,
+                    customerIntent,
+                    "Booking is cancelled but cancellation was not requested",
+                    "This may be an error. Consider using rollback if the cancellation was unintended."
+                );
             }
-            return ValidationResult.valid();
+
+            // Basic validation passed - action appears successful
+            String actualOutcome = String.format("Booking %s: %s -> %s on %s, Status: %s",
+                currentBooking.bookingNumber(),
+                currentBooking.from(),
+                currentBooking.to(),
+                currentBooking.date(),
+                currentBooking.bookingStatus()
+            );
+
+            log.info("Validation successful for booking {}", bookingNumber);
+            return ValidationResult.success(actionTaken, actualOutcome);
+
         } catch (Exception e) {
-            return ValidationResult.invalid("Invalid date format. Use YYYY-MM-DD");
+            log.error("Validation failed for booking {}: {}", bookingNumber, e.getMessage());
+            return ValidationResult.failure(
+                actionTaken,
+                customerIntent,
+                "Error: " + e.getMessage(),
+                "An error occurred during validation. Please verify the booking status manually."
+            );
         }
     }
 
     @Tool(description = """
-        Validates if a route change (from/to airports) is valid.
-        Checks: origin and destination are different, valid airport codes.
-        Returns validation result with error message if invalid.
+        Create a snapshot of the current booking state before making changes.
+        Call this BEFORE performing any modification to enable rollback capability.
+        Parameters:
+        - bookingNumber: The booking reference number
+        - firstName: Customer's first name
+        - lastName: Customer's last name
+        Returns confirmation that the snapshot was created.
         """)
-    public ValidationResult validateRoute(String from, String to) {
-        if (from == null || to == null || from.isBlank() || to.isBlank()) {
-            return ValidationResult.invalid("Airport codes cannot be empty");
-        }
+    public String createSnapshot(String bookingNumber, String firstName, String lastName) {
+        log.info("Creating snapshot for booking {}", bookingNumber);
 
-        if (from.equalsIgnoreCase(to)) {
-            return ValidationResult.invalid("Origin and destination must be different");
-        }
-
-        if (from.length() != 3 || to.length() != 3) {
-            return ValidationResult.invalid("Airport codes must be 3 letters (e.g., JFK, LAX)");
-        }
-
-        return ValidationResult.valid();
-    }
-
-    @Tool(description = """
-        Calculates the change fee based on booking class.
-        Economy: $150, Premium Economy: $100, Business: $50, First Class: Free.
-        Returns the fee amount as a string.
-        """)
-    public String getChangeFee(String bookingClass) {
         try {
-            BookingClass bc = BookingClass.valueOf(bookingClass.toUpperCase().replace(" ", "_"));
-            return switch (bc) {
-                case ECONOMY -> "$150";
-                case PREMIUM_ECONOMY -> "$100";
-                case BUSINESS -> "$50";
-                case FIRST_CLASS -> "Free";
-            };
+            Booking booking = findBooking(bookingNumber, firstName, lastName);
+            BookingSnapshot snapshot = BookingSnapshot.from(booking);
+            snapshots.put(bookingNumber, snapshot);
+
+            return String.format("Snapshot created for booking %s. Current state: %s -> %s on %s, Status: %s. " +
+                    "You can now safely make changes and rollback if needed.",
+                bookingNumber, booking.getFrom(), booking.getTo(), booking.getDate(), booking.getBookingStatus());
+
         } catch (Exception e) {
-            return "Unable to determine fee - invalid booking class";
+            log.error("Failed to create snapshot for booking {}: {}", bookingNumber, e.getMessage());
+            return "Failed to create snapshot: " + e.getMessage();
         }
     }
 
     @Tool(description = """
-        Gets the cancellation policy based on booking class.
-        Returns policy details as a formatted string.
+        Rollback the last changes made to a booking, restoring it to the previously saved snapshot.
+        Use this if a modification was made in error or doesn't match customer intent.
+        Parameters:
+        - bookingNumber: The booking reference number
+        - reason: Why the rollback is being performed
+        Returns confirmation of the rollback or an error if no snapshot exists.
         """)
-    public String getCancellationPolicy(String bookingClass) {
-        try {
-            BookingClass bc = BookingClass.valueOf(bookingClass.toUpperCase().replace(" ", "_"));
-            return switch (bc) {
-                case ECONOMY -> "Cancellation fee: $200. Must cancel 48+ hours before departure.";
-                case PREMIUM_ECONOMY -> "Cancellation fee: $100. Must cancel 48+ hours before departure.";
-                case BUSINESS -> "Cancellation fee: $50. Must cancel 24+ hours before departure.";
-                case FIRST_CLASS -> "Free cancellation up to 24 hours before departure.";
-            };
-        } catch (Exception e) {
-            return "Unable to determine policy - invalid booking class";
+    public String rollbackBooking(String bookingNumber, String firstName, String lastName, String reason) {
+        log.info("Rolling back booking {} due to: {}", bookingNumber, reason);
+
+        BookingSnapshot snapshot = snapshots.get(bookingNumber);
+        if (snapshot == null) {
+            return String.format("Cannot rollback booking %s: No snapshot was created before the modification. " +
+                    "Please manually verify and correct the booking with the customer.", bookingNumber);
         }
+
+        try {
+            Booking booking = findBooking(bookingNumber, firstName, lastName);
+
+            // Restore previous state
+            booking.setDate(snapshot.date());
+            booking.setFrom(snapshot.from());
+            booking.setTo(snapshot.to());
+            booking.setBookingStatus(snapshot.bookingStatus());
+
+            // Remove the used snapshot
+            snapshots.remove(bookingNumber);
+
+            log.info("Successfully rolled back booking {} to state from {}", bookingNumber, snapshot.capturedAt());
+            return String.format("Booking %s has been rolled back to its previous state: %s -> %s on %s, Status: %s. " +
+                    "Reason for rollback: %s",
+                bookingNumber, snapshot.from(), snapshot.to(), snapshot.date(), snapshot.bookingStatus(), reason);
+
+        } catch (Exception e) {
+            log.error("Rollback failed for booking {}: {}", bookingNumber, e.getMessage());
+            return "Rollback failed: " + e.getMessage() + ". Please assist the customer manually.";
+        }
+    }
+
+    private Booking findBooking(String bookingNumber, String firstName, String lastName) {
+        return springFlyDB.getBookings()
+            .stream()
+            .filter(b -> b.getBookingNumber().equalsIgnoreCase(bookingNumber))
+            .filter(b -> b.getPassenger().firstName().equalsIgnoreCase(firstName))
+            .filter(b -> b.getPassenger().lastName().equalsIgnoreCase(lastName))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Booking not found"));
     }
 }

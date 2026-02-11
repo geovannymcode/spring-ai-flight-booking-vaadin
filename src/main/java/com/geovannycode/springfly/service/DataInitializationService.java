@@ -1,10 +1,15 @@
 package com.geovannycode.springfly.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
+import org.springframework.stereotype.Service;
 
 import com.geovannycode.springfly.model.Booking;
 import com.geovannycode.springfly.model.BookingClass;
@@ -12,128 +17,125 @@ import com.geovannycode.springfly.model.BookingStatus;
 import com.geovannycode.springfly.model.Passenger;
 import com.geovannycode.springfly.model.SpringFlyDB;
 
+@Service
+@Order(2)
 public class DataInitializationService implements CommandLineRunner {
 
-    private static final Logger log = LoggerFactory.getLogger(DataInitializationService.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataInitializationService.class);
 
+    private final SpringFlyDB springFlyDB;
+    private final Random random = new Random();
+
+    public DataInitializationService(SpringFlyDB springFlyDB) {
+        this.springFlyDB = springFlyDB;
+    }
     @Override
     public void run(String... args) {
-        log.info("Initializing sample booking data...");
+        logger.info("Starting data initialization...");
+        generateSampleData();
+        logger.info("Data initialization completed. Generated {} passengers and {} bookings",
+                springFlyDB.getPassengers().size(), springFlyDB.getBookings().size());
+    }
 
-        // Sample passengers
-        Passenger passenger1 = new Passenger(
-            "Geovanny", "Mendoza",
-            "geovanny.mendoza@email.com",
-            "+1-555-0101"
-        );
+    private void generateSampleData() {
+        List<Passenger> passengers = generatePassengers();
+        List<Booking> bookings = generateBookings(passengers);
 
-        Passenger passenger2 = new Passenger(
-            "Omar", "Berroteran",
-            "omar.berroteran@email.com",
-            "+1-555-0102"
-        );
+        springFlyDB.setPassengers(passengers);
+        springFlyDB.setBookings(bookings);
+    }
 
-        Passenger passenger3 = new Passenger(
-            "Robert", "Johnson",
-            "robert.j@email.com",
-            "+1-555-0103"
-        );
+    private List<Passenger> generatePassengers() {
+        List<Passenger> passengers = new ArrayList<>();
 
-        Passenger passenger4 = new Passenger(
-            "Maria", "Gomez",
-            "maria.gomez@email.com",
-            "+1-555-0104"
-        );
+        // Generate 10 different passengers
+        passengers.add(new Passenger("Geovanny", "Mendoza"));
+        passengers.add(new Passenger("Claudia", "Aguirre"));
+        passengers.add(new Passenger("Omar", "Berroteran"));
+        passengers.add(new Passenger("Valeria", "Ahumada"));
+        passengers.add(new Passenger("Aimed", "Lopez"));
+        passengers.add(new Passenger("Rafael Jose", "Ramirez"));
+        passengers.add(new Passenger("Maria", "Gomez"));
+        passengers.add(new Passenger("Maria", "Gonzalez"));
+        passengers.add(new Passenger("Andres", "Mendoza"));
+        passengers.add(new Passenger("Atilio", "Vega"));
 
-        Passenger passenger5 = new Passenger(
-            "Elena", "Aguirre",
-            "elena.aguirre@email.com",
-            "+1-555-0105"
-        );
+        return passengers;
+    }
 
-        // Sample bookings
-        Booking booking1 = new Booking(
-            "SF001",
-            LocalDate.now().plusDays(15),
-            LocalDate.now().plusDays(15),
-            passenger1,
-            "JFK",
-            "LAX",
-            BookingStatus.CONFIRMED,
-            "12A",
-            BookingClass.ECONOMY
-        );
+    private List<Booking> generateBookings(List<Passenger> passengers) {
+        List<Booking> bookings = new ArrayList<>();
 
-        Booking booking2 = new Booking(
-            "SF002",
-            LocalDate.now().plusDays(30),
-            LocalDate.now().plusDays(30),
-            passenger2,
-            "ORD",
-            "MIA",
-            BookingStatus.CONFIRMED,
-            "5B",
-            BookingClass.BUSINESS
-        );
+        // Flight routes - Colombia
+        String[][] routes = {
+                {"BAQ", "BOG"}, // Barranquilla -> Bogotá
+                {"BOG", "CLO"}, // Bogotá -> Cali
+                {"BOG", "MDE"}, // Bogotá -> Medellín
+                {"CLO", "CTG"}, // Cali -> Cartagena
+                {"BAQ", "MDE"}, // Barranquilla -> Medellín
+                {"CTG", "BOG"}, // Cartagena -> Bogotá
+                {"SMR", "BOG"}, // Santa Marta -> Bogotá
+                {"PEI", "BOG"}, // Pereira -> Bogotá
+                {"BGA", "BOG"}, // Bucaramanga -> Bogotá
+                {"MDE", "ADZ"}  // Medellín -> San Andrés
+        };
 
-        Booking booking3 = new Booking(
-            "SF003",
-            LocalDate.now().plusDays(7),
-            LocalDate.now().plusDays(7),
-            passenger3,
-            "SFO",
-            "SEA",
-            BookingStatus.CONFIRMED,
-            "22C",
-            BookingClass.PREMIUM_ECONOMY
-        );
+        BookingStatus[] statuses = BookingStatus.values();
+        BookingClass[] classes = BookingClass.values();
 
-        Booking booking4 = new Booking(
-            "SF004",
-            LocalDate.now().plusDays(45),
-            LocalDate.now().plusDays(45),
-            passenger4,
-            "ATL",
-            "DEN",
-            BookingStatus.CONFIRMED,
-            "1A",
-            BookingClass.FIRST_CLASS
-        );
+        for (int i = 0; i < 10; i++) {
+            Passenger passenger = passengers.get(i);
+            String[] route = routes[i];
 
-        Booking booking5 = new Booking(
-            "SF005",
-            LocalDate.now().plusDays(20),
-            LocalDate.now().plusDays(20),
-            passenger5,
-            "BOS",
-            "PHX",
-            BookingStatus.CONFIRMED,
-            "18D",
-            BookingClass.ECONOMY
-        );
+            // Generate booking dates (some in the past, some in the future)
+            LocalDate bookingDate = LocalDate.now().minusDays(random.nextInt(30));
+            LocalDate departureDate = bookingDate.plusDays((long) random.nextInt(60) + 1);
 
-        Booking booking6 = new Booking(
-            "SF006",
-            LocalDate.now().plusDays(60),
-            LocalDate.now().plusDays(60),
-            passenger1,
-            "LAX",
-            "JFK",
-            BookingStatus.CONFIRMED,
-            "8F",
-            BookingClass.BUSINESS
-        );
+            // Generate booking number
+            String bookingNumber = String.format("%04d", 1000 + i);
 
-        // Add bookings to database
-        SpringFlyDB.addBooking(booking1);
-        SpringFlyDB.addBooking(booking2);
-        SpringFlyDB.addBooking(booking3);
-        SpringFlyDB.addBooking(booking4);
-        SpringFlyDB.addBooking(booking5);
-        SpringFlyDB.addBooking(booking6);
+            // Generate seat number based on booking class
+            BookingClass bookingClass = classes[random.nextInt(classes.length)];
+            String seatNumber = generateSeatNumber(bookingClass);
 
-        log.info("Successfully initialized {} sample bookings", SpringFlyDB.getAllBookings().size());
-        log.info("Sample booking numbers: SF001, SF002, SF003, SF004, SF005, SF006");
-        log.info("Test passenger: John Doe (SF001), Jane Smith (SF002)");
+            // Generate booking status (mostly confirmed)
+            BookingStatus status = i < 8 ? BookingStatus.CONFIRMED : statuses[random.nextInt(statuses.length)];
+
+            Booking booking = new Booking(
+                    bookingNumber,
+                    bookingDate,
+                    departureDate,
+                    passenger,
+                    route[0],
+                    route[1],
+                    status,
+                    seatNumber,
+                    bookingClass
+            );
+
+            bookings.add(booking);
+        }
+
+        return bookings;
+    }
+
+    private String generateSeatNumber(BookingClass bookingClass) {
+        int row;
+        char letter = (char) ('A' + random.nextInt(6)); // A-F
+
+        switch (bookingClass) {
+            case BUSINESS:
+                row = 1 + random.nextInt(5); // Rows 1-5
+                break;
+            case PREMIUM_ECONOMY:
+                row = 6 + random.nextInt(5); // Rows 6-10
+                break;
+            case ECONOMY:
+            default:
+                row = 11 + random.nextInt(20); // Rows 11-30
+                break;
+        }
+
+        return row + String.valueOf(letter);
     }
 }
