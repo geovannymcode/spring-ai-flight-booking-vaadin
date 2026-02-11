@@ -49,7 +49,7 @@ public class AboutView extends VerticalLayout {
         techCards.add(
             createTechCard(VaadinIcon.COGS, "Spring Boot 3.5", "Backend robusto con Spring Framework"),
             createTechCard(VaadinIcon.DESKTOP, "Vaadin Flow 24", "UI server-side en Java puro"),
-            createTechCard(VaadinIcon.BRAIN, "Spring AI", "Integración con modelos de lenguaje"),
+            createTechCard(VaadinIcon.MAGIC, "Spring AI", "Integración con modelos de lenguaje"),
             createTechCard(VaadinIcon.USERS, "Multi-Agente", "Supervisor, Booking, Payment, Escalation")
         );
 

@@ -246,3 +246,134 @@ vaadin-app-layout vaadin-side-nav-item[active]::part(item) {
     background: #fee2e2;
     color: #991b1b;
 }
+
+/* ===== Drawer Header & Footer ===== */
+.drawer-header {
+    padding: 20px 16px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+.drawer-footer {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.drawer-version {
+    color: #64748b;
+    font-size: 0.75rem;
+}
+
+/* ===== About View ===== */
+.about-view {
+    background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+    overflow-y: auto;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.about-hero {
+    width: 100%;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 16px;
+    padding: 40px 36px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+.about-hero-title {
+    color: white !important;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 12px 0;
+    letter-spacing: 0.5px;
+}
+
+.about-hero-desc {
+    color: #cbd5e1;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin: 0;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.about-tech-cards {
+    gap: 16px;
+    flex-wrap: wrap;
+    padding: 8px 0;
+}
+
+.about-tech-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    flex: 1;
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.about-tech-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.about-tech-icon {
+    color: #0f766e;
+    width: 32px;
+    height: 32px;
+}
+
+.about-tech-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1e293b;
+}
+
+.about-tech-desc {
+    font-size: 0.8rem;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.about-card {
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    padding: 28px 32px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.about-card-title {
+    margin: 0 0 12px 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.about-card p {
+    color: #475569;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.about-link {
+    display: inline-block;
+    margin-top: 12px;
+    color: #0f766e;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.about-link:hover {
+    color: #0d9488;
+    text-decoration: underline;
+}
