@@ -7,22 +7,17 @@ import java.util.UUID;
 import com.geovannycode.springfly.service.ChatService;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Paragraph;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 
-@Route(value = "chat", layout = MainLayout.class)
-@PageTitle("AI Assistant | SpringFly Airlines")
 public class ChatView extends VerticalLayout {
 
     private final ChatService chatService;
@@ -40,52 +35,40 @@ public class ChatView extends VerticalLayout {
         setSpacing(false);
 
         // Header
-        H2 header = new H2("🤖 SpringFly AI Assistant");
-        header.addClassNames(LumoUtility.Margin.MEDIUM, LumoUtility.Padding.MEDIUM);
-
-        // Welcome message
-        Div welcomeDiv = new Div();
-        welcomeDiv.addClassNames(
-            LumoUtility.Padding.MEDIUM,
-            LumoUtility.Background.CONTRAST_5
-        );
-        welcomeDiv.add(new Paragraph(
-            "👋 Hello! I'm your SpringFly Airlines AI assistant. " +
-            "I can help you with booking inquiries, flight changes, cancellations, and more. " +
-            "How can I assist you today?"
-        ));
+        Div headerDiv = new Div();
+        headerDiv.addClassName("chat-header");
+        headerDiv.setWidthFull();
+        H2 headerTitle = new H2("🤖 SpringFly Concierge");
+        headerDiv.add(headerTitle);
 
         // Messages container with scroll
         messagesContainer = new VerticalLayout();
         messagesContainer.addClassName("messages-container");
         messagesContainer.setPadding(true);
-        messagesContainer.setSpacing(true);
+        messagesContainer.setSpacing(false);
         messagesContainer.getStyle()
             .set("overflow-y", "auto")
-            .set("flex-grow", "1")
-            .set("background-color", "var(--lumo-contrast-5pct)");
+            .set("flex-grow", "1");
 
         // Input area
         messageField = new TextField();
-        messageField.setPlaceholder("Type your message here...");
+        messageField.setPlaceholder("Message");
         messageField.setWidthFull();
         messageField.setClearButtonVisible(true);
 
-        Button sendButton = new Button("Send", VaadinIcon.PAPERPLANE.create());
-        sendButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        Button sendButton = new Button(VaadinIcon.PAPERPLANE.create());
+        sendButton.addClassName("chat-send-button");
         sendButton.addClickShortcut(Key.ENTER);
         sendButton.addClickListener(e -> sendMessage());
 
         HorizontalLayout inputLayout = new HorizontalLayout(messageField, sendButton);
+        inputLayout.addClassName("chat-input-area");
         inputLayout.setWidthFull();
-        inputLayout.setPadding(true);
-        inputLayout.setSpacing(true);
-        inputLayout.getStyle()
-            .set("background-color", "var(--lumo-base-color)")
-            .set("border-top", "1px solid var(--lumo-contrast-10pct)");
+        inputLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        inputLayout.expand(messageField);
 
         // Layout assembly
-        add(header, welcomeDiv, messagesContainer, inputLayout);
+        add(headerDiv, messagesContainer, inputLayout);
         expand(messagesContainer);
     }
 
@@ -107,7 +90,7 @@ public class ChatView extends VerticalLayout {
         messagesContainer.add(loadingIndicator);
         scrollToBottom();
 
-        // Get AI response (in a real app, this should be async)
+        // Get AI response
         getUI().ifPresent(ui -> ui.access(() -> {
             try {
                 String aiResponse = chatService.chat(chatId, userMessage);
@@ -132,48 +115,57 @@ public class ChatView extends VerticalLayout {
 
     private void addMessage(String text, boolean isUser) {
         Div messageDiv = new Div();
-        messageDiv.addClassName("message");
-        messageDiv.getStyle()
-            .set("padding", "12px 16px")
-            .set("border-radius", "8px")
-            .set("max-width", "70%")
-            .set("margin", "4px")
-            .set("align-self", isUser ? "flex-end" : "flex-start")
-            .set("background-color", isUser
-                ? "var(--lumo-primary-color-10pct)"
-                : "var(--lumo-contrast-10pct)");
+        messageDiv.addClassName("message-bubble");
+        messageDiv.addClassName(isUser ? "user" : "assistant");
 
-        String timeStr = LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
-        String sender = isUser ? "You" : "AI Assistant";
+        // Sender header with avatar
+        Div senderDiv = new Div();
+        senderDiv.addClassName("message-sender");
 
-        Div headerDiv = new Div();
-        headerDiv.getStyle()
-            .set("font-size", "var(--lumo-font-size-s)")
-            .set("color", "var(--lumo-secondary-text-color)")
-            .set("margin-bottom", "4px");
-        headerDiv.setText(sender + " • " + timeStr);
+        Span avatar = new Span(isUser ? "Y" : "A");
+        avatar.addClassName("sender-avatar");
+        avatar.addClassName(isUser ? "user" : "assistant");
 
+        String sender = isUser ? "You" : "Assistant";
+        String timeStr = LocalTime.now().format(DateTimeFormatter.ofPattern("M/d/yy, h:mm a"));
+
+        Span senderName = new Span(sender);
+        Span timeSpan = new Span(timeStr);
+        timeSpan.addClassName("message-time");
+
+        if (isUser) {
+            senderDiv.add(senderName, timeSpan, avatar);
+        } else {
+            senderDiv.add(avatar, senderName, timeSpan);
+        }
+
+        // Content
         Div contentDiv = new Div();
         contentDiv.getStyle().set("white-space", "pre-wrap");
         contentDiv.setText(text);
 
-        messageDiv.add(headerDiv, contentDiv);
+        messageDiv.add(senderDiv, contentDiv);
         messagesContainer.add(messageDiv);
     }
 
     private Div createLoadingIndicator() {
         Div loadingDiv = new Div();
+        loadingDiv.addClassName("message-bubble");
+        loadingDiv.addClassName("assistant");
         loadingDiv.addClassName("loading-indicator");
-        loadingDiv.getStyle()
-            .set("padding", "12px 16px")
-            .set("border-radius", "8px")
-            .set("max-width", "70%")
-            .set("margin", "4px")
-            .set("align-self", "flex-start")
-            .set("background-color", "var(--lumo-contrast-10pct)")
-            .set("color", "var(--lumo-secondary-text-color)");
 
-        loadingDiv.setText("🤖 AI Assistant is thinking...");
+        Div senderDiv = new Div();
+        senderDiv.addClassName("message-sender");
+        Span avatar = new Span("A");
+        avatar.addClassName("sender-avatar");
+        avatar.addClassName("assistant");
+        Span name = new Span("Assistant");
+        senderDiv.add(avatar, name);
+
+        Div contentDiv = new Div();
+        contentDiv.setText("Thinking...");
+
+        loadingDiv.add(senderDiv, contentDiv);
         return loadingDiv;
     }
 

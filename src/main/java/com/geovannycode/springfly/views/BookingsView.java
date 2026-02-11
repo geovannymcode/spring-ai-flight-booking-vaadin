@@ -1,20 +1,28 @@
 package com.geovannycode.springfly.views;
 
-import com.geovannycode.springfly.model.Booking;
+import com.geovannycode.springfly.model.BookingDetails;
+import com.geovannycode.springfly.model.BookingStatus;
 import com.geovannycode.springfly.service.BookingService;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H2;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 
-@Route(value = "", layout = MainLayout.class)
-@PageTitle("Flight Bookings | SpringFly Airlines")
+import java.time.format.DateTimeFormatter;
+
 public class BookingsView extends VerticalLayout {
 
-    private final Grid<Booking> grid;
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("MMM dd, yyyy");
+
+    private final Grid<BookingDetails> grid;
     private final BookingService bookingService;
 
     public BookingsView(BookingService bookingService) {
@@ -22,85 +30,90 @@ public class BookingsView extends VerticalLayout {
 
         addClassName("bookings-view");
         setSizeFull();
-        setPadding(true);
-        setSpacing(true);
+        setPadding(false);
+        setSpacing(false);
 
         // Header
-        H2 header = new H2("✈️ Flight Bookings Dashboard");
-        header.addClassNames(LumoUtility.Margin.Bottom.MEDIUM);
+        H2 title = new H2("✈ SpringFly Bookings");
 
-        // Create grid
-        grid = new Grid<>(Booking.class, false);
+        Icon refreshIcon = VaadinIcon.REFRESH.create();
+        refreshIcon.getStyle().set("color", "white");
+        Button refreshButton = new Button(refreshIcon);
+        refreshButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        refreshButton.addClickListener(e -> refreshBookings());
+
+        HorizontalLayout header = new HorizontalLayout(title, refreshButton);
+        header.addClassName("bookings-header");
+        header.setWidthFull();
+        header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+
+        // Grid
+        grid = new Grid<>(BookingDetails.class, false);
         configureGrid();
 
         add(header, grid);
+        expand(grid);
         refreshBookings();
     }
 
     private void configureGrid() {
         grid.addClassName("bookings-grid");
         grid.setSizeFull();
-        grid.addThemeVariants(
-            GridVariant.LUMO_ROW_STRIPES,
-            GridVariant.LUMO_COLUMN_BORDERS
-        );
+        grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
-        // Configure columns
-        grid.addColumn(Booking::getBookingNumber)
-            .setHeader("Booking #")
+        grid.addColumn(BookingDetails::bookingNumber)
+            .setHeader("Number")
+            .setAutoWidth(true)
+            .setSortable(true)
+            .setFlexGrow(0);
+
+        grid.addColumn(bd -> bd.firstName() + " " + bd.lastName())
+            .setHeader("Name")
             .setAutoWidth(true)
             .setSortable(true);
 
-        grid.addColumn(booking -> booking.getPassenger().getFullName())
-            .setHeader("Passenger")
+        grid.addColumn(bd -> bd.date().format(DATE_FORMAT))
+            .setHeader("Date")
             .setAutoWidth(true)
             .setSortable(true);
 
-        grid.addColumn(Booking::getFrom)
+        grid.addColumn(new ComponentRenderer<>(bd -> createStatusBadge(bd.bookingStatus())))
+            .setHeader("Status")
+            .setAutoWidth(true);
+
+        grid.addColumn(BookingDetails::from)
             .setHeader("From")
             .setAutoWidth(true)
             .setSortable(true);
 
-        grid.addColumn(Booking::getTo)
+        grid.addColumn(BookingDetails::to)
             .setHeader("To")
             .setAutoWidth(true)
             .setSortable(true);
 
-        grid.addColumn(Booking::getDate)
-            .setHeader("Flight Date")
-            .setAutoWidth(true)
-            .setSortable(true);
-
-        grid.addColumn(Booking::getSeatNumber)
+        grid.addColumn(BookingDetails::seatNumber)
             .setHeader("Seat")
             .setAutoWidth(true)
             .setSortable(true);
 
-        grid.addColumn(Booking::getBookingClass)
+        grid.addColumn(BookingDetails::bookingClass)
             .setHeader("Class")
             .setAutoWidth(true)
             .setSortable(true);
+    }
 
-        grid.addColumn(booking -> {
-            var status = booking.getBookingStatus();
-            return switch (status) {
-                case CONFIRMED -> "✅ " + status;
-                case CANCELLED -> "❌ " + status;
-                case MODIFIED -> "🔄 " + status;
-                case PENDING -> "⏳ " + status;
-            };
-        })
-            .setHeader("Status")
-            .setAutoWidth(true)
-            .setSortable(true);
+    private Div createStatusBadge(BookingStatus status) {
+        Div badge = new Div();
+        badge.setText(status.name());
+        badge.addClassName("status-badge");
 
-        grid.addColumn(booking -> booking.getPassenger().email())
-            .setHeader("Email")
-            .setAutoWidth(true);
+        switch (status) {
+            case CONFIRMED -> badge.addClassName("confirmed");
+            case COMPLETED -> badge.addClassName("completed");
+            case CANCELLED -> badge.addClassName("cancelled");
+        }
 
-        grid.addColumn(booking -> booking.getPassenger().phoneNumber())
-            .setHeader("Phone")
-            .setAutoWidth(true);
+        return badge;
     }
 
     private void refreshBookings() {
