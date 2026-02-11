@@ -1,1 +1,201 @@
-/* Add your styles here */
+/* ===== SpringFly Global Styles ===== */
+
+/* Main layout */
+.main-layout {
+    background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+    padding: 20px;
+    gap: 20px;
+}
+
+/* ===== Bookings View ===== */
+.bookings-view {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    padding: 0 !important;
+    overflow: hidden;
+}
+
+.bookings-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    padding: 20px 28px;
+    border-radius: 16px 16px 0 0;
+    margin: 0;
+}
+
+.bookings-header h2 {
+    color: white !important;
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.bookings-header vaadin-button {
+    color: white;
+    --lumo-contrast-5pct: rgba(255, 255, 255, 0.1);
+}
+
+.bookings-grid {
+    border: none !important;
+    font-size: 0.9rem;
+}
+
+.bookings-grid vaadin-grid-cell-content {
+    padding: 12px 16px;
+}
+
+/* ===== Chat View ===== */
+.chat-view {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.chat-header {
+    background: linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%);
+    padding: 18px 24px;
+    text-align: center;
+    border-radius: 16px 16px 0 0;
+}
+
+.chat-header h2 {
+    color: white !important;
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.messages-container {
+    background: #fafbfc !important;
+}
+
+.message-bubble {
+    padding: 12px 16px;
+    border-radius: 16px;
+    max-width: 85%;
+    margin: 6px 0;
+    line-height: 1.5;
+    font-size: 0.9rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.message-bubble.user {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+}
+
+.message-bubble.assistant {
+    background: white;
+    color: #1e293b;
+    align-self: flex-start;
+    border: 1px solid #e2e8f0;
+    border-bottom-left-radius: 4px;
+}
+
+.message-sender {
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.message-bubble.user .message-sender {
+    color: rgba(255, 255, 255, 0.7);
+    justify-content: flex-end;
+}
+
+.message-bubble.assistant .message-sender {
+    color: #0f766e;
+}
+
+.message-time {
+    font-size: 0.7rem;
+    font-weight: 400;
+}
+
+.sender-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.sender-avatar.user {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.sender-avatar.assistant {
+    background: linear-gradient(135deg, #0f766e, #0d9488);
+    color: white;
+}
+
+.chat-input-area {
+    background: white;
+    border-top: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    gap: 10px;
+}
+
+.chat-input-area vaadin-text-field {
+    --vaadin-input-field-border-radius: 24px;
+    --vaadin-input-field-background: #f1f5f9;
+}
+
+.chat-send-button {
+    border-radius: 50% !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    padding: 0 !important;
+    background: linear-gradient(135deg, #0f766e, #0d9488) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(13, 148, 136, 0.4);
+    cursor: pointer;
+}
+
+.loading-indicator {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Status badges */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.status-badge.confirmed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.completed {
+    background: #e0e7ff;
+    color: #3730a3;
+}
+
+.status-badge.cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
