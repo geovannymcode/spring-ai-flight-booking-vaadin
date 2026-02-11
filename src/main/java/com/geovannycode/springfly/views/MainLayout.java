@@ -43,7 +43,7 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
         header.addClassName("drawer-header");
 
         SideNav nav = new SideNav();
-        nav.addItem(new SideNavItem("Dashboard", DashboardView.class, VaadinIcon.DASHBOARD.create()));
+        nav.addItem(new SideNavItem("Dashboard", DashboardView.class, VaadinIcon.FLIGHT_LANDING.create()));
         nav.addItem(new SideNavItem("About", AboutView.class, VaadinIcon.INFO_CIRCLE.create()));
 
         Scroller scroller = new Scroller(nav);
