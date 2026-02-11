@@ -32,11 +32,7 @@ public class PaymentAgent {
 
         this.chatClient = chatClientBuilder
                 .defaultSystem(paymentAgentPrompt.content())
-                .defaultAdvisors(
-                    MessageChatMemoryAdvisor.builder(chatMemory).build(),
-                    QuestionAnswerAdvisor.builder(vectorStore).build()
-                )
-                .defaultTools(validationTools)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .build();
     }
 

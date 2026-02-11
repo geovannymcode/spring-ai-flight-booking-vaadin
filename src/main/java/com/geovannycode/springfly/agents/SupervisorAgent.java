@@ -50,13 +50,6 @@ private static final Logger log = LoggerFactory.getLogger(SupervisorAgent.class)
         return promptVersion;
     }
 
-    /**
-     * Handles incoming chat messages by routing to appropriate agent.
-     *
-     * @param chatId unique conversation identifier
-     * @param userMessage customer message
-     * @return agent response
-     */
     public String handle(String chatId, String userMessage) {
         log.info("SupervisorAgent analyzing request for chat {}", chatId);
 

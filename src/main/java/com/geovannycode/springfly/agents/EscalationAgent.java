@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
 
 import com.geovannycode.springfly.config.PromptConfig.AgentPrompt;
@@ -21,7 +19,6 @@ public class EscalationAgent {
     public EscalationAgent(
             ChatClient.Builder chatClientBuilder,
             ChatMemory chatMemory,
-            VectorStore vectorStore,
             AgentPrompt escalationAgentPrompt) {
 
         this.promptVersion = escalationAgentPrompt.version();
@@ -30,10 +27,7 @@ public class EscalationAgent {
 
         this.chatClient = chatClientBuilder
                 .defaultSystem(escalationAgentPrompt.content())
-                .defaultAdvisors(
-                    MessageChatMemoryAdvisor.builder(chatMemory).build(),
-                    QuestionAnswerAdvisor.builder(vectorStore).build()
-                )
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .build();
     }
 

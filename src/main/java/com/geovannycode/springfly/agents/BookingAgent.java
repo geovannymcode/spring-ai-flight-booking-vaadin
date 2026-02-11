@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,6 @@ public class BookingAgent {
     public BookingAgent(
             ChatClient.Builder chatClientBuilder,
             ChatMemory chatMemory,
-            VectorStore vectorStore,
             BookingTools bookingTools,
             ValidationTools validationTools,
             AgentPrompt bookingAgentPrompt) {
@@ -35,14 +33,8 @@ public class BookingAgent {
 
         this.chatClient = chatClientBuilder
                 .defaultSystem(bookingAgentPrompt.content())
-                .defaultAdvisors(
-                    MessageChatMemoryAdvisor.builder(chatMemory).build(),
-                    QuestionAnswerAdvisor.builder(vectorStore).build()
-                )
-                .defaultTools(
-                    bookingTools,
-                    validationTools
-                )
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .defaultTools(bookingTools, validationTools)
                 .build();
     }
 
@@ -50,13 +42,7 @@ public class BookingAgent {
         return promptVersion;
     }
 
-    /**
-     * Handles booking-related customer requests.
-     *
-     * @param chatId unique conversation identifier
-     * @param userMessage customer message
-     * @return agent response
-     */
+    
     public String handle(String chatId, String userMessage) {
         log.info("BookingAgent handling request for chat {}", chatId);
 
