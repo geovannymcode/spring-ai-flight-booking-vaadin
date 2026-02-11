@@ -1,33 +1,37 @@
 package com.geovannycode.springfly.views;
 
-import com.geovannycode.springfly.service.BookingService;
-import com.geovannycode.springfly.service.ChatService;
+import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.dependency.StyleSheet;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.Scroller;
+import com.vaadin.flow.component.sidenav.SideNav;
+import com.vaadin.flow.component.sidenav.SideNavItem;
+import com.vaadin.flow.theme.lumo.LumoUtility;
 
-@Route("")
-@PageTitle("SpringFly")
 @StyleSheet("styles.css")
-public class MainLayout extends HorizontalLayout {
+public class MainLayout extends AppLayout {
 
-    public MainLayout(BookingService bookingService, ChatService chatService) {
-        addClassName("main-layout");
-        setSizeFull();
+    public MainLayout() {
+        DrawerToggle toggle = new DrawerToggle();
 
-        BookingsView bookingsView = new BookingsView(bookingService);
-        bookingsView.getStyle()
-            .set("flex", "2")
-            .set("min-width", "0");
+        H1 title = new H1("✈ SpringFly Airlines");
+        title.getStyle()
+            .set("font-size", "var(--lumo-font-size-l)")
+            .set("margin", "0")
+            .set("padding-left", "8px");
 
-        ChatView chatView = new ChatView(chatService, bookingService);
-        chatView.setOnBookingChanged(bookingsView::refreshBookings);
-        chatView.getStyle()
-            .set("flex", "1")
-            .set("min-width", "320px")
-            .set("max-width", "420px");
+        SideNav nav = new SideNav();
+        nav.addItem(new SideNavItem("Chat", DashboardView.class, VaadinIcon.COMMENTS.create()));
+        nav.addItem(new SideNavItem("About", AboutView.class, VaadinIcon.INFO_CIRCLE.create()));
 
-        add(bookingsView, chatView);
+        Scroller scroller = new Scroller(nav);
+        scroller.setClassName(LumoUtility.Padding.SMALL);
+
+        addToDrawer(scroller);
+        addToNavbar(toggle, title);
+
+        setPrimarySection(Section.DRAWER);
     }
 }

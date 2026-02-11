@@ -1,5 +1,52 @@
 /* ===== SpringFly Global Styles ===== */
 
+/* ===== AppLayout: Navbar ===== */
+vaadin-app-layout::part(navbar) {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    padding: 0 16px;
+    min-height: 48px;
+}
+
+vaadin-app-layout vaadin-drawer-toggle {
+    color: white;
+}
+
+vaadin-app-layout h1 {
+    color: white !important;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* ===== AppLayout: Drawer ===== */
+vaadin-app-layout::part(drawer) {
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+    border-right: none;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.2);
+}
+
+vaadin-app-layout vaadin-side-nav-item {
+    color: #cbd5e1;
+    border-radius: 8px;
+    margin: 4px 0;
+    transition: all 0.2s ease;
+}
+
+vaadin-app-layout vaadin-side-nav-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+vaadin-app-layout vaadin-side-nav-item[active] {
+    background: rgba(14, 165, 233, 0.15);
+    color: #38bdf8;
+}
+
+vaadin-app-layout vaadin-side-nav-item[active]::part(item) {
+    color: #38bdf8;
+}
+
 /* Main layout */
 .main-layout {
     background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
