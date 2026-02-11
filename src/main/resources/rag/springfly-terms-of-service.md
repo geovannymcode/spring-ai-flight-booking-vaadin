@@ -1,58 +1,58 @@
-# SpringFly Airlines - Terms of Service
+# SpringFly Airlines - Términos de Servicio
 
-These Terms of Service govern your experience with **SpringFly Airlines**. By booking a flight, you agree to these terms.
+Estos Términos de Servicio regulan su experiencia con **SpringFly Airlines**. Al reservar un vuelo, usted acepta estos términos.
 
-## 1. Booking Flights
-- Book via our website, mobile app, or authorized travel agents
-- Full payment required at booking unless otherwise specified
-- Ensure accuracy of personal information (Name, ID, etc.) as corrections may incur a $25 fee
-- Booking confirmation will be sent via email within 24 hours
-- Prices are subject to change until payment is completed
+## 1. Reserva de Vuelos
+- Reserve a través de nuestro sitio web, aplicación móvil o agentes de viaje autorizados
+- Se requiere el pago completo al momento de la reserva, salvo que se indique lo contrario
+- Asegúrese de la exactitud de la información personal (Nombre, ID, etc.), ya que las correcciones pueden generar un cargo de $25
+- La confirmación de la reserva será enviada por correo electrónico dentro de las 24 horas
+- Los precios están sujetos a cambios hasta que el pago se haya completado
 
-## 2. Changing Bookings
-- Changes allowed up to 24 hours before scheduled departure
-- Changes can be made online, via mobile app, or by contacting customer support
-- Change fees by booking class:
+## 2. Cambios en Reservas
+- Los cambios están permitidos hasta 24 horas antes de la salida programada
+- Los cambios pueden realizarse en línea, a través de la aplicación móvil o contactando al servicio de atención al cliente
+- Tarifas por cambio según la clase de reserva:
   - Economy: $150
   - Premium Economy: $100
-  - Business Class: $50
-  - First Class: Free
-- Same-day changes subject to availability and may incur additional fees
-- Fare difference may apply for upgrades or route changes
+  - Clase Business: $50
+  - Primera Clase: Gratis
+- Los cambios el mismo día están sujetos a disponibilidad y pueden generar cargos adicionales
+- Puede aplicarse diferencia tarifaria en caso de mejoras de clase o cambios de ruta
 
-## 3. Cancelling Bookings
-- Cancellations accepted up to 48 hours before scheduled departure
-- Cancellation fees by booking class:
+## 3. Cancelación de Reservas
+- Las cancelaciones se aceptan hasta 48 horas antes de la salida programada
+- Tarifas por cancelación según la clase de reserva:
   - Economy: $200
   - Premium Economy: $100
-  - Business Class: $50
-  - First Class: Free
-- Refunds processed within 7 business days to original payment method
-- 24-hour risk-free cancellation policy for bookings made directly with SpringFly
+  - Clase Business: $50
+  - Primera Clase: Gratis
+- Los reembolsos se procesarán dentro de los 7 días hábiles al método de pago original
+- Política de cancelación sin riesgo de 24 horas para reservas realizadas directamente con SpringFly
 
-## 4. Additional Terms
+## 4. Términos Adicionales
 
-### 4.1 Baggage Policy
-- Carry-on allowance varies by booking class
-- Checked baggage fees apply for Economy class
-- Overweight/oversized baggage subject to additional charges
+### 4.1 Política de Equipaje
+- La franquicia de equipaje de mano varía según la clase de reserva
+- Se aplican cargos por equipaje facturado en clase Economy
+- El equipaje con sobrepeso o sobredimensionado está sujeto a cargos adicionales
 
-### 4.2 Flight Delays and Cancellations
-- SpringFly will provide compensation as required by applicable regulations
-- Rebooking on next available flight at no additional cost
-- Meal vouchers and accommodation provided for overnight delays when applicable
+### 4.2 Retrasos y Cancelaciones de Vuelos
+- SpringFly proporcionará compensación según lo exijan las regulaciones aplicables
+- Reubicación en el siguiente vuelo disponible sin costo adicional
+- Se proporcionarán vales de comida y alojamiento para retrasos nocturnos cuando corresponda
 
-### 4.3 Passenger Rights
-- Passengers are entitled to rights under local aviation regulations
-- Special assistance available for passengers with disabilities
-- Unaccompanied minor services available with advance notice
+### 4.3 Derechos del Pasajero
+- Los pasajeros tienen derecho a lo establecido por las regulaciones aeronáuticas locales
+- Asistencia especial disponible para pasajeros con discapacidad
+- Servicio para menores no acompañados disponible con aviso previo
 
-### 4.4 Liability
-- SpringFly's liability is limited as per international aviation conventions
-- Travel insurance is recommended for additional protection
+### 4.4 Responsabilidad
+- La responsabilidad de SpringFly está limitada conforme a las convenciones internacionales de aviación
+- Se recomienda adquirir un seguro de viaje para mayor protección
 
-## 5. Contact Information
-- Customer Support: Available 24/7
-- Email: support@springfly.com
-- Phone: 1-800-SPRING-FLY
-- Website: www.springfly.com
+## 5. Información de Contacto
+- Atención al Cliente: Disponible 24/7
+- Correo electrónico: support@springfly.com
+- Teléfono: 1-800-SPRING-FLY
+- Sitio web: www.springfly.com
