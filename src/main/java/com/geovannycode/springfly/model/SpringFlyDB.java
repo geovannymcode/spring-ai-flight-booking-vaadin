@@ -1,33 +1,30 @@
 package com.geovannycode.springfly.model;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class SpringFlyDB {
-    private static final ConcurrentMap<String, Booking> bookings = new ConcurrentHashMap<>();
+    private List<Passenger> passengers = new ArrayList<>();
+    private List<Booking> bookings = new ArrayList<>();
 
-    public static void addBooking(Booking booking) {
-        bookings.put(booking.getBookingNumber(), booking);
+    // Getters
+    public List<Passenger> getPassengers() {
+        return passengers;
     }
 
-    public static Booking getBooking(String bookingNumber) {
-        return bookings.get(bookingNumber);
+    public List<Booking> getBookings() {
+        return bookings;
     }
 
-    public static List<Booking> getAllBookings() {
-        return List.copyOf(bookings.values());
+    // Setters
+    public void setPassengers(List<Passenger> passengers) {
+        this.passengers = passengers;
     }
 
-    public static void updateBooking(Booking booking) {
-        bookings.put(booking.getBookingNumber(), booking);
-    }
-
-    public static void removeBooking(String bookingNumber) {
-        bookings.remove(bookingNumber);
-    }
-
-    public static void clear() {
-        bookings.clear();
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

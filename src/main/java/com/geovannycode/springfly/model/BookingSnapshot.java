@@ -4,11 +4,20 @@ import java.time.LocalDate;
 
 public record BookingSnapshot(
     String bookingNumber,
-    LocalDate originalDate,
-    String originalFrom,
-    String originalTo,
-    LocalDate newDate,
-    String newFrom,
-    String newTo
+    LocalDate date,
+    String from,
+    String to,
+    BookingStatus bookingStatus,
+    LocalDate capturedAt
 ) {
+    public static BookingSnapshot from(Booking booking) {
+        return new BookingSnapshot(
+            booking.getBookingNumber(),
+            booking.getDate(),
+            booking.getFrom(),
+            booking.getTo(),
+            booking.getBookingStatus(),
+            LocalDate.now()
+        );
+    }
 }

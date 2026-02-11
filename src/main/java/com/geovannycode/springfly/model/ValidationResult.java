@@ -1,14 +1,22 @@
 package com.geovannycode.springfly.model;
 
 public record ValidationResult(
-    boolean isValid,
-    String errorMessage
+ boolean success,
+    String actionTaken,
+    String expectedOutcome,
+    String actualOutcome,
+    String suggestion
 ) {
-    public static ValidationResult valid() {
-        return new ValidationResult(true, null);
+    public static ValidationResult success(String actionTaken, String outcome) {
+        return new ValidationResult(true, actionTaken, outcome, outcome, null);
     }
 
-    public static ValidationResult invalid(String errorMessage) {
-        return new ValidationResult(false, errorMessage);
+    public static ValidationResult failure(String actionTaken, String expected, String actual, String suggestion) {
+        return new ValidationResult(false, actionTaken, expected, actual, suggestion);
+    }
+
+    public static ValidationResult mismatch(String actionTaken, String expected, String actual) {
+        return new ValidationResult(false, actionTaken, expected, actual, 
+            "The action result does not match the expected outcome. Consider verifying with the customer.");
     }
 }
