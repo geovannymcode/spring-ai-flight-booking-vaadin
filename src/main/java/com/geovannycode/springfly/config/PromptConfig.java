@@ -42,7 +42,7 @@ public class PromptConfig {
         try {
             String content = resource.getContentAsString(StandardCharsets.UTF_8);
             String version = filename.replace(".md", "");
-            return new AgentPrompt(content, version);
+            return new AgentPrompt(filename, version, content);
         } catch (IOException e) {
             throw new RuntimeException("Failed to load prompt: " + filename, e);
         }
@@ -51,7 +51,7 @@ public class PromptConfig {
     /**
      * Record to hold agent prompt content and version.
      */
-    public record AgentPrompt(String content, String version) {
+    public record AgentPrompt(String name, String version, String content) {
     }
 }
 
