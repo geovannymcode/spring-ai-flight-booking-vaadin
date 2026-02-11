@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: springfly-postgres
+    environment:
+      POSTGRES_USER: springfly
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-springfly123}
+      POSTGRES_DB: springflydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - springfly_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U springfly -d springflydb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  springfly_postgres_data:
+    driver: local
