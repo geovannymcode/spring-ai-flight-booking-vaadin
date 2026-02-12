@@ -1,34 +1,20 @@
-# My Application README
+# ✈️ SpringFly Vaadin - Sistema de Reservas de Vuelos Impulsado por IA
 
-- [ ] TODO Replace or update this README with instructions relevant to your application
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.10-brightgreen)
+![Spring AI](https://img.shields.io/badge/Spring%20AI-1.1.2-blue)
+![Vaadin](https://img.shields.io/badge/Vaadin-24.7.5-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
 
-To start the application in development mode, import it into your IDE and run the `Application` class. 
-You can also start the application from the command line by running: 
+Una aplicación moderna de reservas de vuelos full-stack construida desde cero con **Java 21**, **Spring AI** y **Vaadin Flow**. Incluye un chatbot inteligente de atención al cliente basado en un sistema multiagente impulsado por OpenAI (GPT-4o-mini), implementación RAG con PGVector y una interfaz moderna y responsive.
 
-```bash
-./mvnw
-```
+## 🎯 Descripción del Proyecto
 
-To build the application in production mode, run:
+Este proyecto es una reimplementación completa del demo [Spring AI Flight Booking](https://github.com/loiane/spring-ai-flight-booking) de **[Loiane Groner](https://github.com/loiane)**, reemplazando Angular por **Vaadin Flow** para lograr una experiencia full-stack 100% Java.
 
-```bash
-./mvnw package
-```
+- **Arquitectura Multi-Agente de IA** con enrutamiento inteligente
+- **RAG (Retrieval-Augmented Generation)** usando PGVector para políticas de la empresa
+- **Function Calling** para operaciones de reservas en tiempo real
+- **Interfaz Vaadin Flow** con diseño moderno y responsive
+- **Mejores prácticas** en desarrollo con Spring Boot y Java 21
 
-To build a Docker image, run:
-
-```bash
-docker build -t my-application:latest .
-```
-
-If you use commercial components, pass the license key as a build secret:
-
-```bash
-docker build --secret id=proKey,src=$HOME/.vaadin/proKey .
-```
-
-## Getting Started
-
-The [Quick Start](https://vaadin.com/docs/v25/getting-started/quick-start) tutorial helps you get started with Vaadin in 
-around 10 minutes. This tutorial walks you through building a simple application, introducing the core concepts along 
-the way.
