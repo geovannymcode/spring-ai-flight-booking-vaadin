@@ -18,3 +18,16 @@ Este proyecto es una reimplementación completa del demo [Spring AI Flight Booki
 - **Interfaz Vaadin Flow** con diseño moderno y responsive
 - **Mejores prácticas** en desarrollo con Spring Boot y Java 21
 
+## 🚀 Características
+
+### 🤖 Soporte al Cliente con IA
+- **Chatbot inteligente** impulsado por OpenAI GPT-4o-mini
+- **Sistema Multi-Agente**:
+    - **SupervisorAgent**: Enruta las solicitudes a agentes especializados
+    - **BookingAgent**: Gestiona reservas de vuelos, cambios y cancelaciones
+    - **PaymentAgent**: Administra consultas de tarifas y políticas de reembolso
+    - **EscalationAgent**: Maneja quejas y problemas complejos
+- **Implementación RAG**: Generación Aumentada por Recuperación usando PGVector
+- **Function Calling**: Integración directa con herramientas de reservas
+- **Gestión de Memoria**: Historial de conversaciones persistente
+
