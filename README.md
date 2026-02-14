@@ -31,3 +31,8 @@ Este proyecto es una reimplementación completa del demo [Spring AI Flight Booki
 - **Function Calling**: Integración directa con herramientas de reservas
 - **Gestión de Memoria**: Historial de conversaciones persistente
 
+### ✈️ Gestión de Reservas
+- **Visualización en tiempo real**: Grid interactivo con todas las reservas
+- **Diseño responsive**: Componentes modernos de Vaadin Flow
+- **Operaciones CRUD completas**: A través del asistente de IA o interacción directa
+
