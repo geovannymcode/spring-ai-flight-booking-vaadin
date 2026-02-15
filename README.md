@@ -36,3 +36,11 @@ Este proyecto es una reimplementación completa del demo [Spring AI Flight Booki
 - **Diseño responsive**: Componentes modernos de Vaadin Flow
 - **Operaciones CRUD completas**: A través del asistente de IA o interacción directa
 
+### 🏗️ Arquitectura Técnica
+- **Backend**: Spring Boot 3.5.10 con Spring AI 1.1.2
+- **Frontend**: Vaadin Flow 24.7.5 (Java puro, sin necesidad de JavaScript)
+- **Base de datos**: PostgreSQL con extensión PGVector
+- **Modelo de IA**: OpenAI GPT-4o-mini (Chat) + text-embedding-3-small (Embeddings)
+- **Vector Store**: PGVector para búsqueda semántica de documentos
+- **Contenedores**: Docker Compose para desarrollo
+
