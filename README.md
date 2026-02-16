@@ -44,3 +44,11 @@ Este proyecto es una reimplementación completa del demo [Spring AI Flight Booki
 - **Vector Store**: PGVector para búsqueda semántica de documentos
 - **Contenedores**: Docker Compose para desarrollo
 
+## 📋 Prerrequisitos
+
+- **Java 21** (JDK 21 o superior)
+- **Maven 3.8+** (o usar el Maven Wrapper incluido)
+- **Docker Desktop** (para PostgreSQL con PGVector)
+- **Clave de API de OpenAI**
+- **IDE**: IntelliJ IDEA, Eclipse o VS Code con extensiones de Java
+
