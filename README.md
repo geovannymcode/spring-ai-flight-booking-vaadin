@@ -52,3 +52,45 @@ Este proyecto es una reimplementación completa del demo [Spring AI Flight Booki
 - **Clave de API de OpenAI**
 - **IDE**: IntelliJ IDEA, Eclipse o VS Code con extensiones de Java
 
+## 🔧 Instalación y Configuración
+
+### 1. Clonar el Repositorio
+
+```bash
+git clone https://github.com/geovannymcode/spring-ai-flight-booking-vaadin.git
+cd springfly
+```
+
+### 2. Configurar Variables de Entorno
+
+Crea un archivo `.env` en la raíz del proyecto:
+
+```env
+DB_PASSWORD=springfly123
+OPENAI_API_KEY=tu-clave-de-api-de-openai
+```
+
+### 3. Iniciar PostgreSQL con PGVector
+
+```bash
+docker compose up -d
+```
+
+Esto iniciará PostgreSQL 17 con la extensión PGVector en el puerto 5432.
+
+### 4. Compilar y Ejecutar la Aplicación
+
+Usando Maven Wrapper (recomendado):
+
+```bash
+./mvnw clean install
+./mvnw spring-boot:run
+```
+
+O usando tu Maven local:
+
+```bash
+mvn clean install
+mvn spring-boot:run
+```
+
