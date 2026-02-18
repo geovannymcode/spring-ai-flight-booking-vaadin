@@ -181,16 +181,22 @@ El sistema utiliza Generación Aumentada por Recuperación para acceder a las po
 
 ## 📊 Datos de Ejemplo
 
-La aplicación se inicializa con 6 reservas de ejemplo:
+La aplicación se inicializa con **10 reservas** de ejemplo con rutas dentro de Colombia:
 
-| Reserva # | Pasajero       | Ruta       | Clase            | Estado     |
-|-----------|----------------|------------|------------------|------------|
-| SF001     | John Doe       | JFK → LAX  | Economy          | Confirmado |
-| SF002     | Jane Smith     | ORD → MIA  | Business         | Confirmado |
-| SF003     | Robert Johnson | SFO → SEA  | Premium Economy  | Confirmado |
-| SF004     | Maria Garcia   | ATL → DEN  | First Class      | Confirmado |
-| SF005     | James Wilson   | BOS → PHX  | Economy          | Confirmado |
-| SF006     | John Doe       | LAX → JFK  | Business         | Confirmado |
+| Reserva # | Pasajero           | Ruta       | Ciudad Origen       | Ciudad Destino    | Estado     |
+|-----------|--------------------|------------|---------------------|-------------------|------------|
+| 1000      | Geovanny Mendoza   | BAQ → BOG  | Barranquilla        | Bogotá            | Confirmado |
+| 1001      | Elena Aguirre      | BOG → CLO  | Bogotá              | Cali              | Confirmado |
+| 1002      | Omar Berroteran    | BOG → MDE  | Bogotá              | Medellín          | Confirmado |
+| 1003      | Valeria Ahumada    | CLO → CTG  | Cali                | Cartagena         | Confirmado |
+| 1004      | Aimed Lopez        | BAQ → MDE  | Barranquilla        | Medellín          | Confirmado |
+| 1005      | Rafael Jose Ramirez| CTG → BOG  | Cartagena           | Bogotá            | Confirmado |
+| 1006      | Maria Gomez        | SMR → BOG  | Santa Marta         | Bogotá            | Confirmado |
+| 1007      | Maria Gonzalez     | PEI → BOG  | Pereira             | Bogotá            | Confirmado |
+| 1008      | Andres Mendoza     | BGA → BOG  | Bucaramanga         | Bogotá            | Aleatorio  |
+| 1009      | Atilio Vega        | MDE → ADZ  | Medellín            | San Andrés        | Aleatorio  |
+
+> **Nota**: Las primeras 8 reservas se crean con estado `CONFIRMED`. Las últimas 2 tienen un estado aleatorio (`CONFIRMED`, `COMPLETED` o `CANCELLED`). La clase de vuelo (Economy, Business, Premium Economy) y los asientos se asignan aleatoriamente.
 
 ## 💬 Uso del Asistente de IA
 
@@ -198,15 +204,15 @@ La aplicación se inicializa con 6 reservas de ejemplo:
 
 **Consultar reserva:**
 ```
-Usuario: ¿Cuál es el estado de mi reserva SF001? Soy John Doe.
+Usuario: ¿Cuál es el estado de mi reserva 1000? Soy Geovanny Mendoza.
 IA: Déjame buscar eso para ti...
 ```
 
 **Cambiar fecha de vuelo:**
 ```
-Usuario: Necesito cambiar mi vuelo SF001 al 15 de marzo de 2026.
-IA: Puedo ayudarte con eso. Tu vuelo actual es clase Economy,
-    por lo que hay una tarifa de cambio de $150. ¿Deseas continuar?
+Usuario: Necesito cambiar mi vuelo 1001 al 15 de marzo de 2026. Soy Elena Aguirre.
+IA: Puedo ayudarte con eso. Tu vuelo actual es de Bogotá a Cali,
+    hay una tarifa de cambio según tu clase. ¿Deseas continuar?
 ```
 
 **Consulta de tarifas:**
@@ -278,7 +284,7 @@ app.prompt.booking-agent=booking-agent-v1.md
 
 1. **Ver reservas**: Navega a la página principal
 2. **Chatear con la IA**: Haz clic en "Asistente IA" en la barra lateral
-3. **Probar consulta de reserva**: Pregunta por la reserva SF001 de John Doe
+3. **Probar consulta de reserva**: Pregunta por la reserva 1000 de Geovanny Mendoza
 4. **Probar cambio de vuelo**: Solicita cambiar una fecha de vuelo
 5. **Probar consulta de tarifas**: Pregunta sobre tarifas de cambio o cancelación
 
