@@ -94,3 +94,220 @@ mvn clean install
 mvn spring-boot:run
 ```
 
+### 5. Acceder a la Aplicación
+
+Abre tu navegador y navega a:
+
+- **Aplicación**: [http://localhost:8080](http://localhost:8080)
+- **Health Check**: [http://localhost:8080/actuator/health](http://localhost:8080/actuator/health)
+
+## 📁 Estructura del Proyecto
+
+```
+springfly/
+├── src/main/java/com/geovannycode/springfly/
+│   ├── Application.java                 # Aplicación principal
+│   ├── agents/                          # Agentes de IA
+│   │   ├── SupervisorAgent.java
+│   │   ├── BookingAgent.java
+│   │   ├── PaymentAgent.java
+│   │   └── EscalationAgent.java
+│   ├── config/                          # Configuración
+│   │   └── PromptConfig.java
+│   ├── model/                           # Modelos de dominio
+│   │   ├── Booking.java
+│   │   ├── Passenger.java
+│   │   ├── BookingStatus.java
+│   │   ├── BookingClass.java
+│   │   ├── BookingDetails.java
+│   │   ├── BookingSnapshot.java
+│   │   ├── ValidationResult.java
+│   │   └── SpringFlyDB.java
+│   ├── service/                         # Lógica de negocio
+│   │   ├── BookingService.java
+│   │   ├── BookingTools.java            # Herramientas de IA (Function Calling)
+│   │   ├── ValidationTools.java
+│   │   ├── ChatService.java
+│   │   ├── DataInitializationService.java
+│   │   └── DocumentIngestionService.java
+│   └── views/                           # Interfaz Vaadin
+│       ├── MainLayout.java
+│       ├── DashboardView.java
+│       ├── BookingsView.java
+│       ├── ChatView.java
+│       └── AboutView.java
+├── src/main/resources/
+│   ├── application.properties           # Configuración de la app
+│   ├── META-INF/resources/
+│   │   └── styles.css                   # Estilos personalizados
+│   ├── prompts/                         # Prompts de agentes
+│   │   ├── supervisor-agent-v1.md
+│   │   ├── booking-agent-v1.md
+│   │   ├── payment-agent-v1.md
+│   │   ├── escalation-agent-v1.md
+│   │   └── system-prompt-v1.md
+│   └── rag/                             # Documentos RAG
+│       └── springfly-terms-of-service.md
+├── compose.yaml                         # Docker Compose
+└── pom.xml                              # Configuración Maven
+```
+
+## 🤖 Profundización en las Características de IA
+
+### Arquitectura Multi-Agente
+
+El sistema utiliza un enfoque sofisticado de múltiples agentes:
+
+1. **SupervisorAgent**: Analiza las solicitudes entrantes y las enruta al especialista adecuado
+2. **BookingAgent**: Equipado con herramientas de reservas para operaciones de vuelos
+3. **PaymentAgent**: Gestiona cálculos de tarifas y políticas de reembolso
+4. **EscalationAgent**: Maneja problemas complejos y quejas
+
+### Herramientas de IA Disponibles
+
+- `getBookingDetails` - Obtener información del vuelo
+- `changeFlightDate` - Modificar la fecha de salida
+- `changeFlightRoute` - Actualizar origen/destino
+- `changeBooking` - Cambiar fecha y ruta simultáneamente
+- `cancelBooking` - Procesar cancelaciones
+- `validateAction` - Verificar que la acción realizada fue exitosa
+
+### Implementación RAG
+
+El sistema utiliza Generación Aumentada por Recuperación para acceder a las políticas de la empresa:
+- Términos de servicio almacenados como embeddings en PGVector
+- Búsqueda semántica de información relevante sobre políticas
+- Respuestas contextuales basadas en las directrices de la empresa
+
+## 📊 Datos de Ejemplo
+
+La aplicación se inicializa con 6 reservas de ejemplo:
+
+| Reserva # | Pasajero       | Ruta       | Clase            | Estado     |
+|-----------|----------------|------------|------------------|------------|
+| SF001     | John Doe       | JFK → LAX  | Economy          | Confirmado |
+| SF002     | Jane Smith     | ORD → MIA  | Business         | Confirmado |
+| SF003     | Robert Johnson | SFO → SEA  | Premium Economy  | Confirmado |
+| SF004     | Maria Garcia   | ATL → DEN  | First Class      | Confirmado |
+| SF005     | James Wilson   | BOS → PHX  | Economy          | Confirmado |
+| SF006     | John Doe       | LAX → JFK  | Business         | Confirmado |
+
+## 💬 Uso del Asistente de IA
+
+### Conversaciones de Ejemplo
+
+**Consultar reserva:**
+```
+Usuario: ¿Cuál es el estado de mi reserva SF001? Soy John Doe.
+IA: Déjame buscar eso para ti...
+```
+
+**Cambiar fecha de vuelo:**
+```
+Usuario: Necesito cambiar mi vuelo SF001 al 15 de marzo de 2026.
+IA: Puedo ayudarte con eso. Tu vuelo actual es clase Economy,
+    por lo que hay una tarifa de cambio de $150. ¿Deseas continuar?
+```
+
+**Consulta de tarifas:**
+```
+Usuario: ¿Cuánto cuesta cancelar un boleto de clase Economy?
+IA: Para la clase Economy, la tarifa de cancelación es de $200.
+    Debes cancelar al menos 48 horas antes de la salida.
+```
+
+## 🎨 Componentes de la Interfaz Vaadin
+
+- **MainLayout**: Shell de la aplicación con barra de navegación lateral
+- **DashboardView**: Vista principal del dashboard
+- **BookingsView**: Grid interactivo con todas las reservas
+- **ChatView**: Interfaz de chat en tiempo real con el asistente de IA
+- **AboutView**: Información sobre la aplicación
+
+## 🔒 Seguridad y Mejores Prácticas
+
+- Configuración basada en variables de entorno (sin secretos hardcodeados)
+- Separación de responsabilidades en la capa de servicios
+- Modelos de dominio inmutables usando Java records
+- Logging y manejo de errores completo
+- Validación de entrada en todas las llamadas a herramientas de IA
+- Seguridad transaccional para modificaciones de reservas
+
+## 🛠️ Desarrollo
+
+### Ejecutar en Modo Desarrollo
+
+El modo de desarrollo de Vaadin incluye:
+- Hot reload para cambios en Java
+- Recarga automática del navegador
+- Modo debug habilitado
+
+```bash
+./mvnw spring-boot:run
+```
+
+### Compilar para Producción
+
+```bash
+./mvnw clean package -Pproduction
+java -jar target/springfly-1.0-SNAPSHOT.jar
+```
+
+## 📝 Configuración
+
+### Propiedades Principales de la Aplicación
+
+```properties
+# Configuración del modelo de IA (OpenAI)
+spring.ai.openai.chat.options.model=gpt-4o-mini
+spring.ai.openai.chat.options.temperature=0.7
+spring.ai.openai.embedding.options.model=text-embedding-3-small
+
+# Vector Store
+spring.ai.vectorstore.pgvector.dimensions=1536
+spring.ai.vectorstore.pgvector.distance-type=COSINE_DISTANCE
+
+# Prompts de agentes
+app.prompt.supervisor-agent=supervisor-agent-v1.md
+app.prompt.booking-agent=booking-agent-v1.md
+```
+
+## 🧪 Pruebas
+
+### Pruebas Manuales
+
+1. **Ver reservas**: Navega a la página principal
+2. **Chatear con la IA**: Haz clic en "Asistente IA" en la barra lateral
+3. **Probar consulta de reserva**: Pregunta por la reserva SF001 de John Doe
+4. **Probar cambio de vuelo**: Solicita cambiar una fecha de vuelo
+5. **Probar consulta de tarifas**: Pregunta sobre tarifas de cambio o cancelación
+
+## 📈 Mejoras Futuras
+
+- [ ] Tests de integración con TestContainers
+- [ ] Autenticación y autorización de usuarios
+- [ ] Notificaciones por email para cambios de reservas
+- [ ] Dashboard de analíticas avanzado
+- [ ] Mejoras de responsive para móviles
+- [ ] Soporte multiidioma
+- [ ] Integración con datos de vuelos reales
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas! No dudes en enviar un Pull Request.
+
+## 📄 Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT.
+
+## 👥 Autor
+
+- **Geovanny Mendoza** - [@geovannymcode](https://github.com/geovannymcode)
+
+## 🙏 Agradecimientos
+
+Un agradecimiento especial a **[Loiane Groner](https://github.com/loiane)** por su excelente proyecto original [spring-ai-flight-booking](https://github.com/loiane/spring-ai-flight-booking), que sirvió como base e inspiración para esta reimplementación. Su trabajo demostrando las capacidades de Spring AI con un sistema multiagente fue fundamental para el desarrollo de SpringFly Vaadin.
+
+- **Proyecto original**: [https://github.com/loiane/spring-ai-flight-booking](https://github.com/loiane/spring-ai-flight-booking)
+- Reconstruido desde cero con Java 21, Spring AI y Vaadin Flow
+- Impulsado por OpenAI y PGVector
