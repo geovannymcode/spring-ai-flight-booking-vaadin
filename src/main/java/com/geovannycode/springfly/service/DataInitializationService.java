@@ -53,7 +53,7 @@ public class DataInitializationService implements CommandLineRunner {
         passengers.add(new Passenger("Elena", "Aguirre"));
         passengers.add(new Passenger("Omar", "Berroteran"));
         passengers.add(new Passenger("Valeria", "Ahumada"));
-        passengers.add(new Passenger("Aimed", "Lopez"));
+        passengers.add(new Passenger("Maricela", "Aguirre"));
         passengers.add(new Passenger("Rafael Jose", "Ramirez"));
         passengers.add(new Passenger("Maria", "Gomez"));
         passengers.add(new Passenger("Maria", "Gonzalez"));
@@ -87,9 +87,9 @@ public class DataInitializationService implements CommandLineRunner {
             Passenger passenger = passengers.get(i);
             String[] route = routes[i];
 
-            // Generate booking dates (some in the past, some in the future)
-            LocalDate bookingDate = LocalDate.now().minusDays(random.nextInt(30));
-            LocalDate departureDate = bookingDate.plusDays((long) random.nextInt(60) + 1);
+            // Generate booking dates (departure date is always today or in the future)
+            LocalDate departureDate = LocalDate.now().plusDays(random.nextInt(60));
+            LocalDate bookingDate = departureDate.minusDays((long) random.nextInt(30) + 1);
 
             // Generate booking number
             String bookingNumber = String.format("%04d", 1000 + i);
