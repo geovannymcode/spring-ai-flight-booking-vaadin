@@ -183,18 +183,18 @@ El sistema utiliza Generación Aumentada por Recuperación para acceder a las po
 
 La aplicación se inicializa con **10 reservas** de ejemplo con rutas dentro de Colombia:
 
-| Reserva # | Pasajero           | Ruta       | Ciudad Origen       | Ciudad Destino    | Estado     |
-|-----------|--------------------|------------|---------------------|-------------------|------------|
-| 1000      | Geovanny Mendoza   | BAQ → BOG  | Barranquilla        | Bogotá            | Confirmado |
-| 1001      | Elena Aguirre      | BOG → CLO  | Bogotá              | Cali              | Confirmado |
-| 1002      | Omar Berroteran    | BOG → MDE  | Bogotá              | Medellín          | Confirmado |
-| 1003      | Valeria Ahumada    | CLO → CTG  | Cali                | Cartagena         | Confirmado |
-| 1004      | Aimed Lopez        | BAQ → MDE  | Barranquilla        | Medellín          | Confirmado |
-| 1005      | Rafael Jose Ramirez| CTG → BOG  | Cartagena           | Bogotá            | Confirmado |
-| 1006      | Maria Gomez        | SMR → BOG  | Santa Marta         | Bogotá            | Confirmado |
-| 1007      | Maria Gonzalez     | PEI → BOG  | Pereira             | Bogotá            | Confirmado |
-| 1008      | Andres Mendoza     | BGA → BOG  | Bucaramanga         | Bogotá            | Aleatorio  |
-| 1009      | Atilio Vega        | MDE → ADZ  | Medellín            | San Andrés        | Aleatorio  |
+| Reserva # | Pasajero          | Ruta       | Ciudad Origen       | Ciudad Destino    | Estado     |
+|-----------|-------------------|------------|---------------------|-------------------|------------|
+| 1000      | Geovanny Mendoza  | BAQ → BOG  | Barranquilla        | Bogotá            | Confirmado |
+| 1001      | Elena Aguirre     | BOG → CLO  | Bogotá              | Cali              | Confirmado |
+| 1002      | Omar Berroteran   | BOG → MDE  | Bogotá              | Medellín          | Confirmado |
+| 1003      | Valeria Ahumada   | CLO → CTG  | Cali                | Cartagena         | Confirmado |
+| 1004      | Maricela Aguirre  | BAQ → MDE  | Barranquilla        | Medellín          | Confirmado |
+| 1005      | Rafael Ramirez    | CTG → BOG  | Cartagena           | Bogotá            | Confirmado |
+| 1006      | Maria Gomez       | SMR → BOG  | Santa Marta         | Bogotá            | Confirmado |
+| 1007      | Maria Gonzalez    | PEI → BOG  | Pereira             | Bogotá            | Confirmado |
+| 1008      | Andres Mendoza    | BGA → BOG  | Bucaramanga         | Bogotá            | Aleatorio  |
+| 1009      | Atilio Vega       | MDE → ADZ  | Medellín            | San Andrés        | Aleatorio  |
 
 > **Nota**: Las primeras 8 reservas se crean con estado `CONFIRMED`. Las últimas 2 tienen un estado aleatorio (`CONFIRMED`, `COMPLETED` o `CANCELLED`). La clase de vuelo (Economy, Business, Premium Economy) y los asientos se asignan aleatoriamente.
 
